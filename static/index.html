@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Langchain Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .response {
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Langchain Chatbot</h1>
+        <input type="text" id="query" placeholder="Enter your query">
+        <button onclick="sendQuery()">Submit</button>
+        <div class="response" id="response">
+            <!-- Langchain responses will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        // Function to send a query to the Flask backend
+        function sendQuery() {
+            const queryInput = document.getElementById("query").value;
+            const responseArea = document.getElementById("response");
+
+            // Make an AJAX request to your Flask endpoint
+            fetch("/query", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ query: queryInput }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                responseArea.innerHTML = `<p><strong>Response:</strong> ${data.answer}</p>`;
+            })
+            .catch(error => {
+                responseArea.innerHTML = `<p><strong>Error:</strong> ${error.message}</p>`;
+            });
+        }
+    </script>
+</body>
+</html>
